@@ -1,6 +1,6 @@
-export const runWithErrorHandler = async (fn: () => Promise<void>) => {
+export const runWithErrorHandler = async (fn: Promise<unknown>) => {
   try {
-    await fn();
+    await fn;
   } catch (err) {
     if (err instanceof KnownError) {
       console.error(err.message);

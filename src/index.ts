@@ -1,25 +1,19 @@
 #!/usr/bin/env node
 
-import { parseArgs } from '@src/args';
+import { CliParsedArgs, runCli } from '@src/cli';
 import { getFileStreams, processStream } from '@src/stream';
 import { testPattern } from '@src/regex';
-import { runWithErrorHandler } from '@src/errors';
+import { runWithErrorHandler as runWithErrorHandling } from '@src/errors';
 
-const main = async () => {
-  const argv = parseArgs();
-
-  if (!argv.pattern) {
-    process.exit(0);
-  }
-
-  const streams = argv.files.length
-    ? getFileStreams(argv.files)
+const main = async (args: CliParsedArgs) => {
+  const streams = args.files.length
+    ? getFileStreams(args.files)
     : [process.stdin];
 
   for (const stream of streams) {
     await processStream(stream, {
       forEachLine: (line) => {
-        if (testPattern(line, argv.pattern)) {
+        if (testPattern(line, args.pattern)) {
           console.log(line);
         }
       },
@@ -27,6 +21,4 @@ const main = async () => {
   }
 };
 
-(async () => {
-  await runWithErrorHandler(main);
-})();
+void runWithErrorHandling(runCli(main));

@@ -14,7 +14,7 @@ describe('runWithErrorHandler', () => {
   it('executes function successfully without errors', async () => {
     const mockFn = jest.fn().mockResolvedValue(undefined);
 
-    await runWithErrorHandler(mockFn);
+    await runWithErrorHandler(mockFn());
 
     expect(mockFn).toHaveBeenCalledTimes(1);
     expect(consoleErrorSpy).not.toHaveBeenCalled();
@@ -26,7 +26,7 @@ describe('runWithErrorHandler', () => {
       .fn()
       .mockRejectedValue(new InvalidArgsError(errorMessage));
 
-    await runWithErrorHandler(mockFn);
+    await runWithErrorHandler(mockFn());
 
     expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
     expect(consoleErrorSpy).toHaveBeenCalledWith(errorMessage);
@@ -36,7 +36,7 @@ describe('runWithErrorHandler', () => {
     const error = new Error('Unknown error');
     const mockFn = jest.fn().mockRejectedValue(error);
 
-    await runWithErrorHandler(mockFn);
+    await runWithErrorHandler(mockFn());
 
     expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
     expect(consoleErrorSpy).toHaveBeenCalledWith(error);
