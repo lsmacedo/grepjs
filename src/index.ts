@@ -9,6 +9,10 @@ import { InvalidArgsError } from '@src/errors';
   try {
     const argv = parseArgs();
 
+    if (!argv.pattern) {
+      process.exit(0);
+    }
+
     const streams = argv.files.length
       ? getFileStreams(argv.files)
       : [process.stdin];
