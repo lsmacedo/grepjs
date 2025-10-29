@@ -1,10 +1,4 @@
-export const testPattern = (
-  line: string,
-  pattern: string,
-  onMatch: (line: string) => void
-) => {
+export const testPattern = (text: string, pattern: string) => {
   const regExp = new RegExp(pattern);
-  if (regExp.test(line)) {
-    onMatch(line);
-  }
+  return regExp.test(text);
 };

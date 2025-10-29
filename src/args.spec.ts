@@ -1,4 +1,4 @@
-import { parseArgs } from '@src/parseArgs';
+import { parseArgs } from '@src/args';
 import { InvalidArgsError } from '@src/errors';
 
 describe('parseArgs', () => {

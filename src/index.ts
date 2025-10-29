@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { parseArgs } from '@src/parseArgs';
+import { parseArgs } from '@src/args';
 import { getFileStreams, processFileStream } from '@src/stream';
 import { testPattern } from '@src/regex';
 import { InvalidArgsError } from '@src/errors';
@@ -18,9 +18,13 @@ import { InvalidArgsError } from '@src/errors';
       : [process.stdin];
 
     for (const stream of streams) {
-      await processFileStream(stream, (line) =>
-        testPattern(line, argv.pattern, console.log)
-      );
+      await processFileStream(stream, {
+        forEachLine: (line) => {
+          if (testPattern(line, argv.pattern)) {
+            console.log(line);
+          }
+        },
+      });
     }
   } catch (err) {
     if (err instanceof InvalidArgsError) {

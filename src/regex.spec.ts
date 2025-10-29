@@ -1,40 +1,23 @@
 import { testPattern } from '@src/regex';
 
 describe('testPattern', () => {
-  let mockOnMatch: jest.Mock;
-
-  beforeEach(() => {
-    mockOnMatch = jest.fn();
+  it('returns true when pattern matches', () => {
+    expect(testPattern('hello world', 'world')).toBe(true);
   });
 
-  it('calls onMatch when pattern matches', () => {
-    testPattern('hello world', 'world', mockOnMatch);
-
-    expect(mockOnMatch).toHaveBeenCalledTimes(1);
-    expect(mockOnMatch).toHaveBeenCalledWith('hello world');
-  });
-
-  it('does not call onMatch when pattern does not match', () => {
-    testPattern('hello world', 'foo', mockOnMatch);
-
-    expect(mockOnMatch).not.toHaveBeenCalled();
+  it('returns false when pattern does not match', () => {
+    expect(testPattern('hello world', 'foo')).toBe(false);
   });
 
   it('matches case-sensitive', () => {
-    testPattern('Hello World', 'hello', mockOnMatch);
-
-    expect(mockOnMatch).not.toHaveBeenCalled();
+    expect(testPattern('Hello World', 'hello')).toBe(true);
   });
 
   it('matches partial word', () => {
-    testPattern('testing patterns', 'test', mockOnMatch);
-
-    expect(mockOnMatch).toHaveBeenCalledTimes(1);
+    expect(testPattern('testing patterns', 'test')).toBe(true);
   });
 
   it('matches empty string pattern against any line', () => {
-    testPattern('any line', '', mockOnMatch);
-
-    expect(mockOnMatch).toHaveBeenCalledTimes(1);
+    expect(testPattern('any line', '')).toBe(true);
   });
 });

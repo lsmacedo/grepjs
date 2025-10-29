@@ -5,9 +5,13 @@ export const getFileStreams = (files: string[]): NodeJS.ReadableStream[] => {
   return files.map((file) => fs.createReadStream(file));
 };
 
+type ProcessFileStreamOptions = {
+  forEachLine: (line: string) => void;
+};
+
 export const processFileStream = async (
   stream: NodeJS.ReadableStream,
-  onLine: (line: string) => void
+  options: ProcessFileStreamOptions
 ) => {
   const rl = readline.createInterface({
     input: stream,
@@ -15,7 +19,7 @@ export const processFileStream = async (
   });
 
   return new Promise((resolve, reject) => {
-    rl.on('line', onLine);
+    rl.on('line', options.forEachLine);
     rl.on('close', resolve);
     rl.on('error', reject);
   });

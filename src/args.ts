@@ -14,7 +14,7 @@ export const parseArgs = (argv = process.argv) => {
       describe: 'Files to search in',
       type: 'string',
       array: true,
-      demandOption: true,
+      default: [],
     })
     .exitProcess(false)
     .fail((msg, err) => {

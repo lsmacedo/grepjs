@@ -51,26 +51,26 @@ describe('processFileStream', () => {
     });
   };
 
-  it('calls onLine for each line in the stream', async () => {
+  it('calls forEachLine for each line in the stream', async () => {
     const lines = ['line 1', 'line 2', 'line 3'];
     const stream = createMockStream(lines);
-    const mockOnLine = jest.fn();
+    const forEachLine = jest.fn();
 
-    await processFileStream(stream, mockOnLine);
+    await processFileStream(stream, { forEachLine });
 
-    expect(mockOnLine).toHaveBeenCalledTimes(3);
-    expect(mockOnLine).toHaveBeenNthCalledWith(1, 'line 1');
-    expect(mockOnLine).toHaveBeenNthCalledWith(2, 'line 2');
-    expect(mockOnLine).toHaveBeenNthCalledWith(3, 'line 3');
+    expect(forEachLine).toHaveBeenCalledTimes(3);
+    expect(forEachLine).toHaveBeenNthCalledWith(1, 'line 1');
+    expect(forEachLine).toHaveBeenNthCalledWith(2, 'line 2');
+    expect(forEachLine).toHaveBeenNthCalledWith(3, 'line 3');
   });
 
   it('handles empty stream', async () => {
     const stream = createMockStream([]);
-    const mockOnLine = jest.fn();
+    const forEachLine = jest.fn();
 
-    await processFileStream(stream, mockOnLine);
+    await processFileStream(stream, { forEachLine });
 
-    expect(mockOnLine).not.toHaveBeenCalled();
+    expect(forEachLine).not.toHaveBeenCalled();
   });
 
   it('rejects when stream emits error', async () => {
@@ -80,9 +80,9 @@ describe('processFileStream', () => {
       },
     });
 
-    const mockOnLine = jest.fn();
+    const forEachLine = jest.fn();
 
-    await expect(processFileStream(stream, mockOnLine)).rejects.toThrow(
+    await expect(processFileStream(stream, { forEachLine })).rejects.toThrow(
       'Stream error'
     );
   });
