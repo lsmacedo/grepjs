@@ -9,8 +9,8 @@ describe('testPattern', () => {
     expect(testPattern('hello world', 'foo')).toBe(false);
   });
 
-  it('matches case-sensitive', () => {
-    expect(testPattern('Hello World', 'hello')).toBe(true);
+  it('runs case-sensitive by default', () => {
+    expect(testPattern('Hello World', 'hello')).toBe(false);
   });
 
   it('matches partial word', () => {
