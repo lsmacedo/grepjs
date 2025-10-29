@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { Readable } from 'stream';
-import { getFileStreams, processFileStream } from '@src/stream';
+import { getFileStreams, processStream } from '@src/stream';
 
 jest.mock('fs');
 
@@ -41,7 +41,7 @@ describe('getFileStreams', () => {
   });
 });
 
-describe('processFileStream', () => {
+describe('processStream', () => {
   const createMockStream = (lines: string[]): NodeJS.ReadableStream => {
     return new Readable({
       read() {
@@ -56,7 +56,7 @@ describe('processFileStream', () => {
     const stream = createMockStream(lines);
     const forEachLine = jest.fn();
 
-    await processFileStream(stream, { forEachLine });
+    await processStream(stream, { forEachLine });
 
     expect(forEachLine).toHaveBeenCalledTimes(3);
     expect(forEachLine).toHaveBeenNthCalledWith(1, 'line 1');
@@ -68,7 +68,7 @@ describe('processFileStream', () => {
     const stream = createMockStream([]);
     const forEachLine = jest.fn();
 
-    await processFileStream(stream, { forEachLine });
+    await processStream(stream, { forEachLine });
 
     expect(forEachLine).not.toHaveBeenCalled();
   });
@@ -82,7 +82,7 @@ describe('processFileStream', () => {
 
     const forEachLine = jest.fn();
 
-    await expect(processFileStream(stream, { forEachLine })).rejects.toThrow(
+    await expect(processStream(stream, { forEachLine })).rejects.toThrow(
       'Stream error'
     );
   });

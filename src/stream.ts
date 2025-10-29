@@ -9,7 +9,7 @@ type ProcessFileStreamOptions = {
   forEachLine: (line: string) => void;
 };
 
-export const processFileStream = async (
+export const processStream = async (
   stream: NodeJS.ReadableStream,
   options: ProcessFileStreamOptions
 ) => {
