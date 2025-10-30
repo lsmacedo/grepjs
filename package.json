@@ -1,5 +1,5 @@
 {
-  "name": "grepjs",
+  "name": "@lsmacedo/grepjs",
   "version": "1.0.0",
   "bin": {
     "grepjs": "./dist/index.js"
