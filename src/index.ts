@@ -2,7 +2,7 @@
 
 import { CliParsedArgs, runCli } from '@src/cli';
 import { getFileStreams, processStream } from '@src/utils/stream';
-import { buildRegExp } from '@src/utils/regex';
+import { buildRegExp, highlightMatches } from '@src/utils/regex';
 
 const main = async (args: CliParsedArgs) => {
   const regExp = buildRegExp(args.pattern, {
@@ -18,9 +18,21 @@ const main = async (args: CliParsedArgs) => {
   for (const stream of streams) {
     await processStream(stream, {
       forEachLine: (line) => {
-        if (regExp.test(line) !== args.invertMatch) {
-          console.log(line);
+        const matches = Array.from(line.matchAll(regExp));
+
+        if (Boolean(matches.length) === args.invertMatch) {
+          return;
         }
+
+        console.log(
+          args.invertMatch
+            ? line
+            : highlightMatches(
+                line,
+                matches,
+                (match) => `\x1b[31m${match}\x1b[0m`
+              )
+        );
       },
     });
   }

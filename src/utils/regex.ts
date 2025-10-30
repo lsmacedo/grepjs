@@ -12,6 +12,21 @@ export const buildRegExp = (pattern: string, flags: RegExpFlags) => {
 
   return new RegExp(
     pipe(pattern, applyWordMatch, applyLineMatch),
-    flags.caseInsensitive ? 'i' : ''
+    flags.caseInsensitive ? 'gi' : 'g'
   );
+};
+
+export const highlightMatches = (
+  text: string,
+  matches: RegExpExecArray[],
+  highlightFn: (match: string) => string
+) => {
+  const [result, lastIndex] = matches.reduce(
+    ([acc, lastIndex], match) => [
+      acc + text.slice(lastIndex, match.index) + highlightFn(match[0]),
+      match.index + match[0].length,
+    ],
+    ['', 0] as [string, number]
+  );
+  return result + text.slice(lastIndex);
 };

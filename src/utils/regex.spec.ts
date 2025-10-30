@@ -1,4 +1,4 @@
-import { buildRegExp, RegExpFlags } from '@src/utils/regex';
+import { buildRegExp, highlightMatches, RegExpFlags } from '@src/utils/regex';
 
 describe('buildRegExp', () => {
   const flags: RegExpFlags = {
@@ -73,5 +73,60 @@ describe('buildRegExp', () => {
       expect(regExp.test('this is a hello world')).toBe(false);
       expect(regExp.test('hello world')).toBe(true);
     });
+  });
+});
+
+describe('highlightMatches', () => {
+  const bracketHighlight = (text: string) => `[${text}]`;
+
+  it('highlights match at the beginning of text', () => {
+    const text = 'hello world';
+    const regex = /hello/g;
+    const match = regex.exec(text);
+    const matches = match ? [match] : [];
+
+    const result = highlightMatches(text, matches, bracketHighlight);
+    expect(result).toBe('[hello] world');
+  });
+
+  it('highlights match at the end of text', () => {
+    const text = 'hello world';
+    const regex = /world/g;
+    const match = regex.exec(text);
+    const matches = match ? [match] : [];
+
+    const result = highlightMatches(text, matches, bracketHighlight);
+    expect(result).toBe('hello [world]');
+  });
+
+  it('highlights multiple matches', () => {
+    const text = 'the quick brown fox jumps over the lazy dog';
+    const regex = /the/g;
+    const matches: RegExpExecArray[] = [];
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      matches.push(match);
+    }
+
+    const result = highlightMatches(text, matches, bracketHighlight);
+    expect(result).toBe('[the] quick brown fox jumps over [the] lazy dog');
+  });
+
+  it('returns original text when matches array is empty', () => {
+    const text = 'hello world';
+    const matches: RegExpExecArray[] = [];
+
+    const result = highlightMatches(text, matches, bracketHighlight);
+    expect(result).toBe('hello world');
+  });
+
+  it('highlights entire text when fully matched', () => {
+    const text = 'hello';
+    const regex = /hello/g;
+    const match = regex.exec(text);
+    const matches = match ? [match] : [];
+
+    const result = highlightMatches(text, matches, bracketHighlight);
+    expect(result).toBe('[hello]');
   });
 });
