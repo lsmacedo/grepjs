@@ -1,6 +1,5 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { InvalidArgsError } from '@src/errors';
 
 export type CliParsedArgs = Awaited<
   ReturnType<typeof grepCommandBuilder>['argv']
@@ -8,6 +7,32 @@ export type CliParsedArgs = Awaited<
 
 const grepCommandBuilder = (builder: ReturnType<typeof yargs>) => {
   return builder
+    .option('ignore-case', {
+      description: 'Ignores case distinctions',
+      type: 'boolean',
+      alias: 'i',
+      default: false,
+    })
+    .option('invert-match', {
+      description:
+        'Inverts the search, selecting all lines that do not contain the pattern',
+      type: 'boolean',
+      alias: 'v',
+      default: false,
+    })
+    .option('word-regexp', {
+      description: 'Matches only whole words',
+      type: 'boolean',
+      alias: 'w',
+      default: false,
+    })
+    .option('line-regexp', {
+      description:
+        'Matches only if the pattern is an exact match for the entire line',
+      type: 'boolean',
+      alias: 'x',
+      default: false,
+    })
     .positional('pattern', {
       describe: 'Regular expression pattern to search for',
       type: 'string',
@@ -32,10 +57,6 @@ export const runCli = (
       grepCommandBuilder,
       handler
     )
-    .exitProcess(false)
-    .fail((msg, err) => {
-      if (err) throw err;
-      throw new InvalidArgsError(msg);
-    })
+    .exitProcess(process.env.NODE_ENV !== 'test')
     .parseAsync();
 };

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { Readable } from 'stream';
-import { getFileStreams, processStream } from '@src/stream';
+import { getFileStreams, processStream } from '@src/utils/stream';
 
 jest.mock('fs');
 
