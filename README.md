@@ -2,7 +2,7 @@
 
 A simple grep-like CLI written in TypeScript.
 
-<img width="623" height="143" alt="image" src="https://github.com/user-attachments/assets/ac23f3d0-c1d9-41ba-8d6e-7c16760e8f8d" />
+<img width="533" height="179" alt="image" src="https://github.com/user-attachments/assets/dd17d91e-0c34-4e7a-bef3-02fb56255d45" />
 
 ## Installation
 
